@@ -1,21 +1,22 @@
-import { BlogPosts } from 'app/components/posts'
+import { Hero } from './components/hero';
+import { Services } from './components/services';
+import { WorkWith } from './components/work-with';
+import { Portfolio } from './components/portfolio';
+import { Process } from './components/process';
+import { AboutSection } from './components/about-section';
+import { CTA } from './components/cta';
 
 export default function Page() {
   return (
-    <section>
-      <h1 className="mb-8 text-2xl font-semibold tracking-tighter">
-        My Portfolio
-      </h1>
-      <p className="mb-4">
-        {`I'm a Vim enthusiast and tab advocate, finding unmatched efficiency in
-        Vim's keystroke commands and tabs' flexibility for personal viewing
-        preferences. This extends to my support for static typing, where its
-        early error detection ensures cleaner code, and my preference for dark
-        mode, which eases long coding sessions by reducing eye strain.`}
-      </p>
-      <div className="my-8">
-        <BlogPosts />
-      </div>
-    </section>
-  )
+    <main>
+      <Hero />
+      <Services />
+      <WorkWith />
+      <Portfolio />
+      <Process />
+      <AboutSection />
+      <CTA />
+    </main>
+  );
 }
+
