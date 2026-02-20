@@ -1,31 +1,44 @@
 import { notFound } from 'next/navigation'
 import { CustomMDX } from 'app/components/mdx'
 import { formatDate, getBlogPosts } from 'app/blog/utils'
+import { fetchWordPressPost, stripHtmlTags } from 'lib/wordpress'
 import { baseUrl } from 'app/sitemap'
 
 export async function generateStaticParams() {
-  let posts = getBlogPosts()
-
-  return posts.map((post) => ({
+  const mdxPosts = getBlogPosts()
+  
+  return mdxPosts.map((post) => ({
     slug: post.slug,
   }))
 }
 
-export function generateMetadata({ params }) {
+export async function generateMetadata({ params }) {
   let post = getBlogPosts().find((post) => post.slug === params.slug)
+
   if (!post) {
-    return
+    const wpPost = await fetchWordPressPost(params.slug)
+    if (!wpPost) {
+      return
+    }
+
+    const title = stripHtmlTags(wpPost.title.rendered)
+    const description = stripHtmlTags(wpPost.excerpt.rendered)
+
+    return {
+      title,
+      description,
+      openGraph: {
+        title,
+        description,
+        type: 'article',
+        publishedTime: wpPost.date,
+        url: `${baseUrl}/blog/${wpPost.slug}`,
+      },
+    }
   }
 
-  let {
-    title,
-    publishedAt: publishedTime,
-    summary: description,
-    image,
-  } = post.metadata
-  let ogImage = image
-    ? image
-    : `${baseUrl}/og?title=${encodeURIComponent(title)}`
+  const { title, publishedAt: publishedTime, summary: description, image } = post.metadata
+  const ogImage = image ? image : `${baseUrl}/og?title=${encodeURIComponent(title)}`
 
   return {
     title,
@@ -36,11 +49,7 @@ export function generateMetadata({ params }) {
       type: 'article',
       publishedTime,
       url: `${baseUrl}/blog/${post.slug}`,
-      images: [
-        {
-          url: ogImage,
-        },
-      ],
+      images: [{ url: ogImage }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -51,11 +60,45 @@ export function generateMetadata({ params }) {
   }
 }
 
-export default function Blog({ params }) {
+export default async function Blog({ params }) {
   let post = getBlogPosts().find((post) => post.slug === params.slug)
 
   if (!post) {
-    notFound()
+    const wpPost = await fetchWordPressPost(params.slug)
+    if (!wpPost) {
+      notFound()
+    }
+
+    return (
+      <section>
+        <script
+          type="application/ld+json"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify({
+              '@context': 'https://schema.org',
+              '@type': 'BlogPosting',
+              headline: stripHtmlTags(wpPost.title.rendered),
+              datePublished: wpPost.date,
+              dateModified: wpPost.modified,
+              description: stripHtmlTags(wpPost.excerpt.rendered),
+              url: `${baseUrl}/blog/${wpPost.slug}`,
+            }),
+          }}
+        />
+        <h1 className="title font-semibold text-2xl tracking-tighter">
+          {stripHtmlTags(wpPost.title.rendered)}
+        </h1>
+        <div className="flex justify-between items-center mt-2 mb-8 text-sm">
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+            {formatDate(wpPost.date)}
+          </p>
+        </div>
+        <article className="prose dark:prose-invert max-w-none">
+          <div dangerouslySetInnerHTML={{ __html: wpPost.content.rendered }} />
+        </article>
+      </section>
+    )
   }
 
   return (
@@ -90,7 +133,7 @@ export default function Blog({ params }) {
           {formatDate(post.metadata.publishedAt)}
         </p>
       </div>
-      <article className="prose">
+      <article className="prose dark:prose-invert max-w-none">
         <CustomMDX source={post.content} />
       </article>
     </section>

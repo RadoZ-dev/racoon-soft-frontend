@@ -1,5 +1,7 @@
 import fs from 'fs'
 import path from 'path'
+import { fetchWordPressPosts, WordPressPost } from 'lib/wordpress'
+import { transformWordPressPost } from 'lib/wordpress-utils'
 
 type Metadata = {
   title: string
@@ -87,4 +89,24 @@ export function formatDate(date: string, includeRelative = false) {
   }
 
   return `${fullDate} (${formattedDate})`
+}
+
+export async function getWordPressPosts() {
+  try {
+    const posts = await fetchWordPressPosts(1, 100)
+    return posts.map(transformWordPressPost)
+  } catch (error) {
+    console.error('Error fetching WordPress posts:', error)
+    return []
+  }
+}
+
+export async function getAllBlogPosts() {
+  const mdxPosts = getBlogPosts()
+  const wpPosts = await getWordPressPosts()
+  
+  // Combine and sort by date
+  return [...mdxPosts, ...wpPosts].sort((a, b) => {
+    return new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
+  })
 }
