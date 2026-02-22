@@ -13,10 +13,11 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }) {
-  let post = getBlogPosts().find((post) => post.slug === params.slug)
+  const { slug } = await params
+  let post = getBlogPosts().find((post) => post.slug === slug)
 
   if (!post) {
-    const wpPost = await fetchWordPressPost(params.slug)
+    const wpPost = await fetchWordPressPost(slug)
     if (!wpPost) {
       return
     }
@@ -61,10 +62,11 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function Blog({ params }) {
-  let post = getBlogPosts().find((post) => post.slug === params.slug)
+  const { slug } = await params
+  let post = getBlogPosts().find((post) => post.slug === slug)
 
   if (!post) {
-    const wpPost = await fetchWordPressPost(params.slug)
+    const wpPost = await fetchWordPressPost(slug)
     if (!wpPost) {
       notFound()
     }
