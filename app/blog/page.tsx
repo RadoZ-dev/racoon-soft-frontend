@@ -13,24 +13,32 @@ export default async function Page() {
     <section className="py-16 md:py-24">
       <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
         <h1 className="font-semibold text-2xl mb-8 tracking-tighter">My Blog</h1>
-        <div>
-          {posts.map((post) => (
-            <Link
-              key={post.slug}
-              className="flex flex-col space-y-1 mb-4"
-              href={`/blog/${post.slug}`}
-            >
-              <div className="w-full space-x-0">
-                <p className="text-2xl mb-1">
-                  {post.metadata.title}
-                </p>
-                <p className="text-neutral-600 dark:text-neutral-400 tabular-nums">
-                  {formatDate(post.metadata.publishedAt, false)}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
+         {posts.length === 0 ? (
+          <div className="p-6 bg-neutral-100 dark:bg-neutral-900 rounded-lg border border-neutral-200 dark:border-neutral-800">
+            <p className="text-neutral-600 dark:text-neutral-400">
+              No blog posts available at the moment. Check back soon!
+            </p>
+          </div>
+        ) : (
+          <div>
+            {posts.map((post) => (
+              <Link
+                key={post.slug}
+                className="flex flex-col space-y-1 mb-4"
+                href={`/blog/${post.slug}`}
+              >
+                <div className="w-full space-x-0">
+                  <p className="text-2xl mb-1">
+                    {post.metadata.title}
+                  </p>
+                  <p className="text-neutral-600 dark:text-neutral-400 tabular-nums">
+                    {formatDate(post.metadata.publishedAt, false)}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )
