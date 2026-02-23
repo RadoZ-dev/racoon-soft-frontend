@@ -21,7 +21,7 @@ export function transformWordPressPost(post: WordPressPost): BlogPost {
       title: stripHtmlTags(post.title.rendered),
       publishedAt: post.date,
       summary: stripHtmlTags(post.excerpt.rendered).substring(0, 160),
-      image: imageUrl,
+      image: imageUrl ?? undefined,
     },
     slug: post.slug,
     content: post.content.rendered,
