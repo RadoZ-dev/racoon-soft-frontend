@@ -1,31 +1,21 @@
 import { notFound } from 'next/navigation'
-import { CustomMDX } from 'app/components/mdx'
-import { formatDate, getBlogPosts } from 'app/blog/utils'
+import { formatDate } from 'app/blog/utils'
+import { fetchWordPressPost, stripHtmlTags } from 'lib/wordpress'
 import { baseUrl } from 'app/sitemap'
 
-export async function generateStaticParams() {
-  let posts = getBlogPosts()
+type Params = { slug: string }
 
-  return posts.map((post) => ({
-    slug: post.slug,
-  }))
-}
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>
+}) {
+  const { slug } = await params
+  const wpPost = await fetchWordPressPost(slug)
+  if (!wpPost) return
 
-export function generateMetadata({ params }) {
-  let post = getBlogPosts().find((post) => post.slug === params.slug)
-  if (!post) {
-    return
-  }
-
-  let {
-    title,
-    publishedAt: publishedTime,
-    summary: description,
-    image,
-  } = post.metadata
-  let ogImage = image
-    ? image
-    : `${baseUrl}/og?title=${encodeURIComponent(title)}`
+  const title = stripHtmlTags(wpPost.title.rendered)
+  const description = stripHtmlTags(wpPost.excerpt.rendered)
 
   return {
     title,
@@ -34,32 +24,23 @@ export function generateMetadata({ params }) {
       title,
       description,
       type: 'article',
-      publishedTime,
-      url: `${baseUrl}/blog/${post.slug}`,
-      images: [
-        {
-          url: ogImage,
-        },
-      ],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      images: [ogImage],
+      publishedTime: wpPost.date,
+      url: `${baseUrl}/blog/${wpPost.slug}`,
     },
   }
 }
 
-export default function Blog({ params }) {
-  let post = getBlogPosts().find((post) => post.slug === params.slug)
-
-  if (!post) {
-    notFound()
-  }
+export default async function Blog({
+  params,
+}: {
+  params: Promise<Params>
+}) {
+  const { slug } = await params
+  const wpPost = await fetchWordPressPost(slug)
+  if (!wpPost) notFound()
 
   return (
-    <section>
+    <section className="py-16 md:py-24" id="post">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -67,32 +48,30 @@ export default function Blog({ params }) {
           __html: JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'BlogPosting',
-            headline: post.metadata.title,
-            datePublished: post.metadata.publishedAt,
-            dateModified: post.metadata.publishedAt,
-            description: post.metadata.summary,
-            image: post.metadata.image
-              ? `${baseUrl}${post.metadata.image}`
-              : `/og?title=${encodeURIComponent(post.metadata.title)}`,
-            url: `${baseUrl}/blog/${post.slug}`,
-            author: {
-              '@type': 'Person',
-              name: 'My Portfolio',
-            },
+            headline: stripHtmlTags(wpPost.title.rendered),
+            datePublished: wpPost.date,
+            dateModified: wpPost.modified,
+            description: stripHtmlTags(wpPost.excerpt.rendered),
+            url: `${baseUrl}/blog/${wpPost.slug}`,
           }),
         }}
       />
-      <h1 className="title font-semibold text-2xl tracking-tighter">
-        {post.metadata.title}
-      </h1>
-      <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {formatDate(post.metadata.publishedAt)}
-        </p>
+      <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
+        <h1 className="title font-semibold text-2xl tracking-tighter">
+          {stripHtmlTags(wpPost.title.rendered)}
+        </h1>
+        <div className="flex justify-between items-center mt-2 mb-8 text-sm">
+          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+            {formatDate(wpPost.date)}
+          </p>
+        </div>
+        <article className="prose prose-neutral dark:prose-invert max-w-none text-neutral-700 dark:text-neutral-300">
+          <div
+            className="wp-content"
+            dangerouslySetInnerHTML={{ __html: wpPost.content.rendered }}
+          />
+        </article>
       </div>
-      <article className="prose">
-        <CustomMDX source={post.content} />
-      </article>
     </section>
   )
 }

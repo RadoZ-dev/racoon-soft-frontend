@@ -69,11 +69,36 @@ export async function generateStaticParams() {
   }));
 }
 
-export default function ProjectPage({ params }: { params: { slug: string } }) {
-  const project = projects[params.slug];
+type Params = { slug: string }
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<Params>
+}) {
+  const { slug } = await params
+  const project = projects[slug]
 
   if (!project) {
-    notFound();
+    notFound()
+  }
+
+  return {
+    title: project.title,
+    description: project.subtitle,
+  }
+}
+
+export default async function ProjectPage({
+  params,
+}: {
+  params: Promise<Params>
+}) {
+  const { slug } = await params
+  const project = projects[slug]
+
+  if (!project) {
+    notFound()
   }
 
   return (

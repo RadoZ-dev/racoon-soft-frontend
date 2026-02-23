@@ -1,5 +1,7 @@
 import fs from 'fs'
 import path from 'path'
+import { fetchWordPressPosts } from 'lib/wordpress'
+import { transformWordPressPost } from 'lib/wordpress-utils'
 
 type Metadata = {
   title: string
@@ -54,37 +56,50 @@ export function getBlogPosts() {
 }
 
 export function formatDate(date: string, includeRelative = false) {
-  let currentDate = new Date()
+  const currentDate = new Date()
   if (!date.includes('T')) {
     date = `${date}T00:00:00`
   }
-  let targetDate = new Date(date)
+  const targetDate = new Date(date)
 
-  let yearsAgo = currentDate.getFullYear() - targetDate.getFullYear()
-  let monthsAgo = currentDate.getMonth() - targetDate.getMonth()
-  let daysAgo = currentDate.getDate() - targetDate.getDate()
+  const yearsAgo = currentDate.getFullYear() - targetDate.getFullYear()
+  const monthsAgo = currentDate.getMonth() - targetDate.getMonth()
+  const daysAgo = currentDate.getDate() - targetDate.getDate()
 
-  let formattedDate = ''
-
-  if (yearsAgo > 0) {
-    formattedDate = `${yearsAgo}y ago`
-  } else if (monthsAgo > 0) {
-    formattedDate = `${monthsAgo}mo ago`
-  } else if (daysAgo > 0) {
-    formattedDate = `${daysAgo}d ago`
-  } else {
-    formattedDate = 'Today'
-  }
-
-  let fullDate = targetDate.toLocaleString('en-us', {
-    month: 'long',
+  let formattedDate = targetDate.toLocaleString('en-us', {
+    month: 'short',
     day: 'numeric',
     year: 'numeric',
   })
 
-  if (!includeRelative) {
-    return fullDate
+  if (includeRelative) {
+    if (yearsAgo > 0) {
+      formattedDate += ` (${yearsAgo}y ago)`
+    } else if (monthsAgo > 0) {
+      formattedDate += ` (${monthsAgo}mo ago)`
+    } else if (daysAgo > 0) {
+      formattedDate += ` (${daysAgo}d ago)`
+    } else {
+      formattedDate += ' (Today)'
+    }
   }
 
-  return `${fullDate} (${formattedDate})`
+  return formattedDate
+}
+
+export async function getWordPressPosts() {
+  try {
+    const posts = await fetchWordPressPosts(1, 100)
+    return posts.map(transformWordPressPost)
+  } catch (error) {
+    console.error('Error fetching WordPress posts:', error)
+    return []
+  }
+}
+
+export async function getAllBlogPosts() {
+  const wpPosts = await getWordPressPosts()
+  return wpPosts.sort((a, b) => {
+    return new Date(b.metadata.publishedAt).getTime() - new Date(a.metadata.publishedAt).getTime()
+  })
 }
