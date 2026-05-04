@@ -3,8 +3,8 @@ import https from 'https'
 const WORDPRESS_API = process.env.WORDPRESS_API_URL || 'http://localhost/wp-json/wp/v2'
 
 // Helper function to fetch from WordPress with support for self-signed certs
-async function wordPressFetch(url: string) {
-  return new Promise((resolve, reject) => {
+async function wordPressFetch<T>(url: string): Promise<T> {
+  return new Promise<T>((resolve, reject) => {
     const isHttps = url.startsWith('https')
     
     if (!isHttps) {
@@ -30,7 +30,7 @@ async function wordPressFetch(url: string) {
           const jsonStart = data.indexOf('[') !== -1
             ? Math.min(...[data.indexOf('['), data.indexOf('{')].filter(i => i !== -1))
             : data.indexOf('{')
-          resolve(JSON.parse(jsonStart > 0 ? data.slice(jsonStart) : data))
+          resolve(JSON.parse(jsonStart > 0 ? data.slice(jsonStart) : data) as T)
         } catch (e) {
           reject(e)
         }
