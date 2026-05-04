@@ -1,0 +1,27 @@
+// 7-1 Architecture
+// https://sass-guidelin.es/#the-7-1-pattern
+
+// Vendors
+@use 'vendors/tailwind';
+
+// Abstracts
+@use 'abstracts/variables';
+@use 'abstracts/mixins';
+
+// Base
+@use 'base/base';
+@use 'base/typography';
+
+// Layout
+@use 'layout/header';
+@use 'layout/footer';
+
+// Components
+@use 'components/blog' as components-blog;
+
+// Pages
+@use 'pages/home' as pages-home;
+@use 'pages/blog' as pages-blog;
+
+// Themes
+@use 'themes/dark';

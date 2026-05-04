@@ -27,7 +27,10 @@ async function wordPressFetch<T = unknown>(url: string): Promise<T> {
       })
       res.on('end', () => {
         try {
-          resolve(JSON.parse(data))
+          const jsonStart = data.indexOf('[') !== -1
+            ? Math.min(...[data.indexOf('['), data.indexOf('{')].filter(i => i !== -1))
+            : data.indexOf('{')
+          resolve(JSON.parse(jsonStart > 0 ? data.slice(jsonStart) : data) as T)
         } catch (e) {
           reject(e)
         }

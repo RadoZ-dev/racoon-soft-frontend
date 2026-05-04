@@ -4,7 +4,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'wp-headless.ddev.site',
+        hostname: 'peru-flamingo-759905.hostingersite.com',
         pathname: '/**',
       },
     ],
