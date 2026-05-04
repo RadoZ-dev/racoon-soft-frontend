@@ -11,7 +11,7 @@ import { baseUrl } from './sitemap'
 export const metadata: Metadata = {
   metadataBase: new URL(baseUrl),
   title: {
-    default: 'raccoonSoft - WordPress Development Studio',
+    default: 'raccoonSoft - WordPress Development Studio - test2',
     template: '%s | raccoonSoft',
   },
   description: 'WordPress development and custom web solutions for agencies and growing businesses.',

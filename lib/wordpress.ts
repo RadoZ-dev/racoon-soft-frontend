@@ -3,7 +3,7 @@ import https from 'https'
 const WORDPRESS_API = process.env.WORDPRESS_API_URL || 'http://localhost/wp-json/wp/v2'
 
 // Helper function to fetch from WordPress with support for self-signed certs
-async function wordPressFetch<T>(url: string): Promise<T> {
+async function wordPressFetch<T = unknown>(url: string): Promise<T> {
   return new Promise<T>((resolve, reject) => {
     const isHttps = url.startsWith('https')
     
@@ -88,7 +88,7 @@ export async function fetchWordPressPosts(
       url += `&search=${encodeURIComponent(searchTerm)}`
     }
 
-    const posts: WordPressPost[] = await wordPressFetch(url)
+    const posts = await wordPressFetch<WordPressPost[]>(url)
     return posts
   } catch (error) {
     console.error('Failed to fetch WordPress posts:', error instanceof Error ? error.message : error)
@@ -99,7 +99,7 @@ export async function fetchWordPressPosts(
 export async function fetchWordPressPost(slug: string) {
   try {
     const url = `${WORDPRESS_API}/posts?slug=${slug}&_embed`
-    const posts: WordPressPost[] = await wordPressFetch(url)
+    const posts = await wordPressFetch<WordPressPost[]>(url)
     return posts[0] || null
   } catch (error) {
     console.error('Failed to fetch WordPress post:', error instanceof Error ? error.message : error)
@@ -109,7 +109,7 @@ export async function fetchWordPressPost(slug: string) {
 
 export async function fetchWordPressCategories() {
   try {
-    const categories: WordPressCategory[] = await wordPressFetch(`${WORDPRESS_API}/categories`)
+    const categories = await wordPressFetch<WordPressCategory[]>(`${WORDPRESS_API}/categories`)
     return categories
   } catch (error) {
     console.error('Failed to fetch WordPress categories:', error instanceof Error ? error.message : error)
@@ -119,7 +119,7 @@ export async function fetchWordPressCategories() {
 
 export async function fetchWordPressTags() {
   try {
-    const tags: WordPressTag[] = await wordPressFetch(`${WORDPRESS_API}/tags`)
+    const tags = await wordPressFetch<WordPressTag[]>(`${WORDPRESS_API}/tags`)
     return tags
   } catch (error) {
     console.error('Failed to fetch WordPress tags:', error instanceof Error ? error.message : error)
