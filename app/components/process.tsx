@@ -27,7 +27,7 @@ export function Process() {
         <div className="grid md:grid-cols-3 gap-8 md:gap-12">
           {steps.map((step) => (
             <div key={step.number} className="text-center">
-              <div className="w-20 h-20 rounded-full bg-black text-white flex items-center justify-center text-2xl font-bold mx-auto mb-6">
+              <div className="w-20 h-20 rounded-full bg-violet-600 text-white flex items-center justify-center text-2xl font-bold mx-auto mb-6">
                 {step.number}
               </div>
               <h3 className="text-xl md:text-2xl mb-4">{step.title}</h3>

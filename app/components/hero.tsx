@@ -7,7 +7,7 @@ export function Hero() {
           Build Custom Websites <br className="hidden md:block" />
           <span className="relative inline-block">
             Faster
-            <span className="absolute bottom-2 left-0 w-full h-3 bg-black opacity-20 -z-10"></span>
+            <span className="absolute bottom-2 left-0 w-full h-3 bg-violet-600 opacity-20 -z-10"></span>
           </span>
           .
         </h1>
@@ -22,9 +22,9 @@ export function Hero() {
             <input
               type="email"
               placeholder="Enter email..."
-              className="flex-1 px-4 py-3 border-2 border-black rounded-full focus:outline-none focus:ring-2 focus:ring-black text-base"
+              className="flex-1 px-4 py-3 border-2 border-violet-600 rounded-full focus:outline-none focus:ring-2 focus:ring-violet-600 text-base"
             />
-            <button className="px-6 py-3 bg-black text-white rounded-full hover:bg-gray-800 transition-colors text-base whitespace-nowrap">
+            <button className="px-6 py-3 bg-violet-600 text-white rounded-full hover:bg-violet-700 transition-colors text-base whitespace-nowrap">
               Subscribe →
             </button>
           </div>

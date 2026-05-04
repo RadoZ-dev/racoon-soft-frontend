@@ -23,7 +23,7 @@ export function Portfolio() {
   ];
 
   return (
-    <section className="py-16 md:py-24 bg-gray-50" id="work">
+    <section className="py-16 md:py-24 bg-violet-50" id="work">
       <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
         <h2 className="text-3xl md:text-4xl lg:text-5xl mb-12 md:mb-16 text-center">
           Recent Projects
@@ -33,15 +33,15 @@ export function Portfolio() {
           {projects.map((project) => (
             <div 
               key={project.slug} 
-              className="bg-white rounded-2xl overflow-hidden border-2 border-black hover:shadow-xl transition-shadow"
+              className="bg-white rounded-2xl overflow-hidden border-2 border-violet-200 hover:shadow-xl hover:border-violet-400 transition-all"
             >
               {/* Placeholder for project images */}
-              <div className="aspect-[4/3] bg-gray-100 border-b-2 border-black flex items-center justify-center">
-                <span className="text-gray-400 text-sm">Project Screenshot</span>
+              <div className="aspect-[4/3] bg-violet-100 border-b-2 border-violet-200 flex items-center justify-center">
+                <span className="text-violet-400 text-sm">Project Screenshot</span>
               </div>
               
               <div className="p-6">
-                <div className="inline-block px-3 py-1 bg-gray-100 rounded-full text-xs mb-3">
+                <div className="inline-block px-3 py-1 bg-violet-100 text-violet-700 rounded-full text-xs mb-3">
                   {project.category}
                 </div>
                 <h3 className="text-xl md:text-2xl mb-3">{project.title}</h3>
@@ -50,7 +50,7 @@ export function Portfolio() {
                 </p>
                 <Link 
                   href={`/work/${project.slug}`} 
-                  className="inline-flex items-center text-sm md:text-base hover:underline font-medium"
+                  className="inline-flex items-center text-sm md:text-base hover:underline font-medium text-violet-600"
                 >
                   View case study →
                 </Link>
