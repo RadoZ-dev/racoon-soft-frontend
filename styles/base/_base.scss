@@ -1,15 +1,16 @@
 ::selection {
-  background-color: #47a3f3;
+  background-color: #7C3AED;
   color: #fefefe;
 }
 
 html {
   min-width: 360px;
+  scroll-behavior: smooth;
 }
 
 // Remove Safari input shadow on mobile
-input[type='text'],
-input[type='email'] {
+input[type="text"],
+input[type="email"] {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;

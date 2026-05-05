@@ -1,3 +1,4 @@
+import './global.css'
 import '../styles/main.scss'
 import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
@@ -36,7 +37,7 @@ export const metadata: Metadata = {
   },
 }
 
-const cx = (...classes) => classes.filter(Boolean).join(' ')
+const cx = (...classes: (string | undefined | null | false)[]) => classes.filter(Boolean).join(' ')
 
 export default function RootLayout({
   children,

@@ -1,8 +1,6 @@
 // 7-1 Architecture
 // https://sass-guidelin.es/#the-7-1-pattern
-
-// Vendors
-@use 'vendors/tailwind';
+// Note: Tailwind is imported separately in layout.tsx via app/global.css
 
 // Abstracts
 @use 'abstracts/variables';

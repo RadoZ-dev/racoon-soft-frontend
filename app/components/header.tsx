@@ -34,7 +34,7 @@ export function Header() {
   };
 
   return (
-    <header className="border-b border-gray-200 bg-white sticky top-0 z-50">
+    <header className="border-b border-violet-100 bg-white sticky top-0 z-50">
       <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
@@ -56,7 +56,7 @@ export function Header() {
                 key={item.name}
                 href={item.href}
                 onClick={() => handleNavClick(item.href)}
-                className="text-sm font-medium text-gray-600 hover:text-black transition-colors"
+                className="text-sm font-medium text-gray-600 hover:text-violet-700 transition-colors"
               >
                 {item.name}
               </Link>
@@ -65,7 +65,7 @@ export function Header() {
 
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden p-2 hover:bg-gray-100 transition-colors rounded-lg"
+            className="lg:hidden p-2 hover:bg-violet-50 transition-colors rounded-lg"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -75,13 +75,13 @@ export function Header() {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <nav className="lg:hidden border-t border-gray-200 py-4">
+          <nav className="lg:hidden border-t border-violet-100 py-4">
             {navItems.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
                 onClick={() => handleNavClick(item.href)}
-                className="block px-4 py-3 text-base hover:bg-gray-50 transition-colors"
+                className="block px-4 py-3 text-base hover:bg-violet-50 hover:text-violet-700 transition-colors"
               >
                 {item.name}
               </Link>
