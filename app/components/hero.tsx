@@ -1,38 +1,52 @@
+import Link from 'next/link';
+import Image from 'next/image';
+
 export function Hero() {
   return (
     <section className="py-16 md:py-24 lg:py-32">
-      <div className="max-w-[900px] mx-auto px-6 lg:px-12 text-center">
-        {/* Main Headline */}
-        <h1 className="text-4xl md:text-5xl lg:text-7xl mb-6 leading-tight">
-          Build Custom Websites <br className="hidden md:block" />
-          <span className="relative inline-block">
-            Faster
-            <span className="absolute bottom-2 left-0 w-full h-3 bg-violet-600 opacity-20 -z-10"></span>
-          </span>
-          .
-        </h1>
-        
-        <p className="text-lg md:text-xl mb-8 md:mb-10 max-w-[600px] mx-auto leading-relaxed text-gray-700">
-          WordPress development and custom web solutions for agencies and fast-moving teams.
-        </p>
+      <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-        {/* Newsletter Signup */}
-        <div className="max-w-[500px] mx-auto mb-4">
-          <div className="flex flex-col sm:flex-row gap-3">
-            <input
-              type="email"
-              placeholder="Enter email..."
-              className="flex-1 px-4 py-3 border-2 border-violet-600 rounded-full focus:outline-none focus:ring-2 focus:ring-violet-600 text-base"
-            />
-            <button className="px-6 py-3 bg-violet-600 text-white rounded-full hover:bg-violet-700 transition-colors text-base whitespace-nowrap">
-              Subscribe →
-            </button>
+          {/* Left — text content */}
+          <div>
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-tight mb-6">
+              Build Custom Websites Faster
+            </h1>
+
+            <span className="block w-2 h-2 rounded-full bg-black mb-6" />
+
+            <p className="text-base md:text-lg leading-relaxed text-gray-600 mb-10 max-w-[480px]">
+              WordPress development and custom web solutions for agencies and fast-moving teams who ship without compromise.
+            </p>
+
+            <div className="flex flex-wrap gap-4">
+              <Link
+                href="/#work"
+                className="px-7 py-3.5 bg-black text-white rounded-full font-semibold text-sm hover:bg-gray-900 transition-colors"
+              >
+                View Our Work →
+              </Link>
+              <Link
+                href="/contact"
+                className="px-7 py-3.5 border-2 border-black text-black rounded-full font-semibold text-sm hover:bg-gray-50 transition-colors"
+              >
+                Get in Touch
+              </Link>
+            </div>
           </div>
+
+          {/* Right — logo image */}
+          <div className="relative rounded-3xl overflow-hidden bg-violet-50 flex items-center justify-center aspect-[4/3]">
+            <Image
+              src="/images/logos/raccoon-soft-logo.svg"
+              alt="raccoonSoft"
+              width={340}
+              height={340}
+              className="w-2/3 h-2/3 object-contain opacity-90"
+            />
+          </div>
+
         </div>
-        
-        <p className="text-sm text-gray-600">
-          Get tips on web development directly in your inbox. Unsubscribe anytime.
-        </p>
       </div>
     </section>
   );
