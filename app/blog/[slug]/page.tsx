@@ -40,7 +40,7 @@ export default async function Blog({
   if (!wpPost) notFound()
 
   return (
-    <section className="py-16 md:py-24" id="post">
+    <main id="post">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -56,22 +56,26 @@ export default async function Blog({
           }),
         }}
       />
-      <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
-        <h1 className="title font-semibold text-2xl tracking-tighter">
-          {stripHtmlTags(wpPost.title.rendered)}
-        </h1>
-        <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-          <p className="text-sm text-neutral-600 dark:text-neutral-400">
+      <section className="py-12 md:py-16 lg:py-24 border-b border-violet-100 bg-violet-50">
+        <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
+          <h1 className="title font-semibold text-2xl tracking-tighter mb-2">
+            {stripHtmlTags(wpPost.title.rendered)}
+          </h1>
+          <p className="text-sm text-neutral-500">
             {formatDate(wpPost.date)}
           </p>
         </div>
-        <article className="prose prose-neutral dark:prose-invert max-w-none text-neutral-700 dark:text-neutral-300">
-          <div
-            className="wp-content"
-            dangerouslySetInnerHTML={{ __html: wpPost.content.rendered }}
-          />
-        </article>
-      </div>
-    </section>
+      </section>
+      <section className="py-12 md:py-16">
+        <div className="max-w-[1200px] mx-auto px-6 lg:px-12">
+          <article className="prose prose-neutral dark:prose-invert max-w-none text-neutral-700 dark:text-neutral-300">
+            <div
+              className="wp-content"
+              dangerouslySetInnerHTML={{ __html: wpPost.content.rendered }}
+            />
+          </article>
+        </div>
+      </section>
+    </main>
   )
 }
